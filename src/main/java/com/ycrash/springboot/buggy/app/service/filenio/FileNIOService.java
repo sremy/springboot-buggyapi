@@ -1,27 +1,26 @@
 package com.ycrash.springboot.buggy.app.service.filenio;
 
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class FileNIOService {
-	
-	public void loadWebClientCalls(Integer noOfCalls, String url) {
-		int i =0;
-		while( i < noOfCalls) {
-			fileClientCall(url);
-			i++;
-		}
-	}
 
-	public  void fileClientCall(String url) {
+    public void loadWebClientCalls(Integer noOfCalls, String url) {
+        int i = 0;
+        while (i < noOfCalls) {
+            fileClientCall(url);
+            i++;
+        }
+    }
+
+    public void fileClientCall(String url) {
         // Specify the path to the file
-        Path filePath = Paths.get("path/to/your/file.txt");
+        Path filePath = Path.of("path/to/your/file.txt");
 
         // Check if the file exists
         if (Files.exists(filePath)) {
@@ -43,5 +42,5 @@ public class FileNIOService {
         } else {
             System.out.println("File does not exist.");
         }
-	}
+    }
 }

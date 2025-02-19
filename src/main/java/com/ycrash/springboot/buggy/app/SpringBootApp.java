@@ -1,6 +1,9 @@
-
 package com.ycrash.springboot.buggy.app;
 
+import com.fasterxml.jackson.databind.Module;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -10,57 +13,57 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.fasterxml.jackson.databind.Module;
-
+@OpenAPIDefinition(servers = {@Server(url = "/")},
+        info = @Info(title = "SpringBoot Buggy API Service", version = "1.0.0", description = "Documentation for SpringBoot Buggy Api Service")
+)
 @SpringBootApplication
-@ComponentScan(basePackages = { 
-		"com.ycrash.springboot.buggy.app",
-		"com.ycrash.springboot.buggy.app.config", 
-		"com.ycrash.springboot.buggy.app.controller",
-		"com.ycrash.springboot.buggy.app.service.blockedapp",
-		"com.ycrash.springboot.buggy.app.service.cpuspike",
-		"com.ycrash.springboot.buggy.app.service.deadlock",
-		"com.ycrash.springboot.buggy.app.service.memoryleak",
-		"com.ycrash.springboot.buggy.app.service.metaspaceleak",
-		"com.ycrash.springboot.buggy.app.service.oomcrash",
-		"com.ycrash.springboot.buggy.app.service.stackoverflow",
-		"com.ycrash.springboot.buggy.app.service.threadleak",
-		"com.ycrash.springboot.buggy.app.service.webclient",
-		"com.ycrash.springboot.buggy.app.service.resttemplate",
-		"com.ycrash.springboot.buggy.app.network"
-		
- })
-public class SpringBootApp implements CommandLineRunner{
+@ComponentScan(basePackages = {
+        "com.ycrash.springboot.buggy.app",
+        "com.ycrash.springboot.buggy.app.controller",
+        "com.ycrash.springboot.buggy.app.service.blockedapp",
+        "com.ycrash.springboot.buggy.app.service.cpuspike",
+        "com.ycrash.springboot.buggy.app.service.deadlock",
+        "com.ycrash.springboot.buggy.app.service.memoryleak",
+        "com.ycrash.springboot.buggy.app.service.metaspaceleak",
+        "com.ycrash.springboot.buggy.app.service.oomcrash",
+        "com.ycrash.springboot.buggy.app.service.stackoverflow",
+        "com.ycrash.springboot.buggy.app.service.threadleak",
+        "com.ycrash.springboot.buggy.app.service.webclient",
+        "com.ycrash.springboot.buggy.app.service.resttemplate",
+        "com.ycrash.springboot.buggy.app.service.network"
 
-	@Override
-	public void run (String...arg0) throws Exception{
-		if(arg0.length > 0 && arg0[0].equals("exitcode")) {
-			throw new ExitException();
-		}
-	}
-	
-	public static void main(String args[]) throws Exception{
-		new SpringApplication(SpringBootApp.class).run(args);
-	}
-	
-	static class ExitException extends RuntimeException implements ExitCodeGenerator {
-		private static final long serialVersionUID = 1L;
+})
+public class SpringBootApp implements CommandLineRunner {
 
-		@Override
-		public int getExitCode() {
-			return 10;
-		}
+    public static void main(String args[]) throws Exception {
+        new SpringApplication(SpringBootApp.class).run(args);
+    }
 
-	}
-	
-	@Bean
-	public WebMvcConfigurer webConfigurer() {
-		return new WebMvcConfigurer() {
-		};
-	}
+    @Override
+    public void run(String... arg0) throws Exception {
+        if (arg0.length > 0 && arg0[0].equals("exitcode")) {
+            throw new ExitException();
+        }
+    }
 
-	@Bean
-	public Module jsonNullableModule() {
-		return new JsonNullableModule();
-	}
+    @Bean
+    public WebMvcConfigurer webConfigurer() {
+        return new WebMvcConfigurer() {
+        };
+    }
+
+    @Bean
+    public Module jsonNullableModule() {
+        return new JsonNullableModule();
+    }
+
+    static class ExitException extends RuntimeException implements ExitCodeGenerator {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public int getExitCode() {
+            return 10;
+        }
+
+    }
 }
