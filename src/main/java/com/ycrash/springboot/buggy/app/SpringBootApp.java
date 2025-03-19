@@ -30,7 +30,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         "com.ycrash.springboot.buggy.app.service.threadleak",
         "com.ycrash.springboot.buggy.app.service.webclient",
         "com.ycrash.springboot.buggy.app.service.resttemplate",
-        "com.ycrash.springboot.buggy.app.service.network"
+        "com.ycrash.springboot.buggy.app.service.hashcode",
+		"com.ycrash.springboot.buggy.app.service.concurrency",
+		"com.ycrash.springboot.buggy.app.service.network"
 
 })
 public class SpringBootApp implements CommandLineRunner {
