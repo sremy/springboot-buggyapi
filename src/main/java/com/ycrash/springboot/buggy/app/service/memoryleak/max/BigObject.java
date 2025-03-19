@@ -8,7 +8,7 @@ public class BigObject {
 
     public BigObject() {
         this.objects = new ArrayList<>();
-        for (int i = 0; i < 1_000_000; i++) {
+        for (int i = 0; i < 10_000_000; i++) {
             objects.add("Hello" + i);
         }
     }
