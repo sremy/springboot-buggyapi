@@ -6,6 +6,7 @@ import com.ycrash.springboot.buggy.app.service.cpuspike.CPUSpikeDemoService;
 import com.ycrash.springboot.buggy.app.service.dbconnectionleak.DBConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.deadlock.DeadLockDemoService;
 import com.ycrash.springboot.buggy.app.service.diskspace.DiskSpaceService;
+import com.ycrash.springboot.buggy.app.service.exception.BuggyService;
 import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.hashcode.Book;
 import com.ycrash.springboot.buggy.app.service.hashcode.HashCodeService;
@@ -119,24 +120,6 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private List<BigObject.SmallObject> smallObjects = new ArrayList<>();
-
-    @GetMapping(value = "memory-leak2", produces = {"application/json"})
-    public ResponseEntity<Void> invokeMemoryLeak2() {
-        log.debug("Memory leak 2 demo");
-        BigObject.SmallObject smallObject = new BigObject().new SmallObject();
-        smallObject.hello();
-        smallObjects.add(smallObject);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping(value = "memory-leak3", produces = {"application/json"})
-    public ResponseEntity<Void> invokeMemoryLeak3() {
-        log.debug("Memory leak 3 demo");
-        memoryLeakDemoService.sortBigList();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping(value = "stack-overflow", produces = {"application/json"})
     public ResponseEntity<Void> invokeStackOverflow() {
         log.debug("Stack Overflow demo");
@@ -239,6 +222,34 @@ public class BuggyAppController {
     public ResponseEntity<Void> restClientHugeUploads(@RequestParam("image.url") String imageUrl, @RequestParam("rest.url") String restUrl, @RequestParam Integer numberOfCalls) {
         log.debug("HTTP Connections Leak");
         restClientService.loadRestClientCallsWithThreads(numberOfCalls, restUrl, imageUrl);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private List<BigObject.SmallObject> smallObjects = new ArrayList<>();
+
+    @GetMapping(value = "memory-leak2", produces = {"application/json"})
+    public ResponseEntity<Void> invokeMemoryLeak2() {
+        log.debug("Memory leak 2 demo");
+        BigObject.SmallObject smallObject = new BigObject().new SmallObject();
+        smallObject.hello();
+        smallObjects.add(smallObject);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "memory-leak3", produces = {"application/json"})
+    public ResponseEntity<Void> invokeMemoryLeak3() {
+        log.debug("Memory leak 3 demo");
+        memoryLeakDemoService.sortBigList();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Autowired
+    BuggyService buggyService;
+
+    @GetMapping(value = "buggy-sort", produces = {"application/json"})
+    public ResponseEntity<Void> buggySort() {
+        log.debug("buggySort demo");
+        buggyService.run();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
