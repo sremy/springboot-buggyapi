@@ -1,11 +1,14 @@
 package com.ycrash.springboot.buggy.app.controller;
 
 import com.ycrash.springboot.buggy.app.service.blockedapp.BlockedAppDemoService;
+import com.ycrash.springboot.buggy.app.service.concurrency.ConcurrencyService;
 import com.ycrash.springboot.buggy.app.service.cpuspike.CPUSpikeDemoService;
 import com.ycrash.springboot.buggy.app.service.dbconnectionleak.DBConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.deadlock.DeadLockDemoService;
 import com.ycrash.springboot.buggy.app.service.diskspace.DiskSpaceService;
 import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnectionLeakService;
+import com.ycrash.springboot.buggy.app.service.hashcode.Book;
+import com.ycrash.springboot.buggy.app.service.hashcode.HashCodeService;
 import com.ycrash.springboot.buggy.app.service.httpconnectionleak.HttpConnectionLeak;
 import com.ycrash.springboot.buggy.app.service.memoryleak.MemoryLeakDemoService;
 import com.ycrash.springboot.buggy.app.service.memoryleak.max.BigObject;
@@ -29,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/invoke")
@@ -71,9 +75,18 @@ public class BuggyAppController {
     @Autowired
     private DiskSpaceService diskSpaceService;
 
-    public BuggyAppController(NativeWebRequest request) {
-        this.request = request;
-    }
+    @Autowired
+	private HashCodeService hashCodeService;
+
+	@Autowired
+	private ConcurrencyService concurrencyService;
+
+
+	@Autowired
+	public BuggyAppController(NativeWebRequest request) {
+		this.request = request;
+	}
+	
 
     @GetMapping(value = "blocked-state", produces = {"application/json"})
     public ResponseEntity<Void> invokeBlockedState() {
@@ -225,4 +238,33 @@ public class BuggyAppController {
         restClientService.loadRestClientCallsWithThreads(numberOfCalls, restUrl, imageUrl);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "hashcode", produces = { "application/text" }, method = RequestMethod.GET)
+	public ResponseEntity<String> invokeHashCode() {
+		log.debug("HashCode demo");
+		String bookInsertion = hashCodeService.start();
+		return new ResponseEntity<>(bookInsertion, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "hashcode/search", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<String> invokeHashCodeSearch() {
+
+		long startTime = System.currentTimeMillis();
+		List<Book> bookList = hashCodeService.search();
+		long durationMilliSec = System.currentTimeMillis() - startTime;
+		return new ResponseEntity<>(String.valueOf(durationMilliSec), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "concurrency", produces = { "text/plain" }, method = RequestMethod.GET)
+	public ResponseEntity<String> invokeConcurrent() {
+		log.debug("Concurrent demo");
+		List<Integer> result = concurrencyService.start();
+
+		String stringResult = result.stream()
+				.map(String::valueOf)
+				.collect(Collectors.joining("\n"));
+		return new ResponseEntity<>(stringResult, HttpStatus.OK);
+	}
+
+
 }

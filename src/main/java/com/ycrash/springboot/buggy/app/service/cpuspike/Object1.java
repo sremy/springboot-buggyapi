@@ -13,7 +13,7 @@ public class Object1 {
 	 
 	public static void execute() throws InterruptedException {
 		while (true) {
-			doSomething();
+			doSomething();Thread.onSpinWait();
 		}		
 	}
 	
