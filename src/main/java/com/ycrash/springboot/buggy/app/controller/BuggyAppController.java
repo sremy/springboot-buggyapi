@@ -38,6 +38,9 @@ public class BuggyAppController {
 
     protected NativeWebRequest request;
 
+    BuggyAppController(){
+    }
+
     @Autowired
     private BlockedAppDemoService blockedAppDemoService;
     @Autowired
@@ -156,14 +159,14 @@ public class BuggyAppController {
     }
 
     @GetMapping(value = "db-connections-leak", produces = {"application/json"})
-    public ResponseEntity<Void> leakSQLConnections(@RequestParam("datasource.url") String datasourceUrl, @RequestParam("datasource.username") String datasourceUsername, @RequestParam("datasource.password") String datasourcePassword, @RequestParam("datasource.tablename") String tableName) throws Exception {
+    public ResponseEntity<Void> leakSQLConnections(@RequestParam("datasource.url") String datasourceUrl, @RequestParam("datasource.username") String datasourceUsername, @RequestParam("datasource.password") String datasourcePassword, @RequestParam("datasource.tablename") String tableName) {
         log.debug("DB Connections Leak");
         dbConnectionLeakService.start(datasourceUrl, datasourceUsername, datasourcePassword, tableName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "disk-space-fill", produces = {"application/json"})
-    public ResponseEntity<String> diskSpaceFill(@RequestParam("drive.location") String driveLocation, @RequestParam("percentage.fill") Integer percentageFill) throws Exception {
+    public ResponseEntity<String> diskSpaceFill(@RequestParam("drive.location") String driveLocation, @RequestParam("percentage.fill") Integer percentageFill) {
         log.debug("Disk Space Fill");
         if (percentageFill <= 100) {
             diskSpaceService.fillDiskSpace(driveLocation, percentageFill);
@@ -175,14 +178,14 @@ public class BuggyAppController {
     }
 
     @GetMapping(value = "network-lag-proxy", produces = {"application/json"})
-    public ResponseEntity<String> networkLag(@RequestParam Integer port, @RequestParam Integer delay) throws Exception {
+    public ResponseEntity<String> networkLag(@RequestParam Integer port, @RequestParam Integer delay) {
         log.debug("Network Lag Service");
         networkLagService.startNetworkLagProxy(port, delay);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @GetMapping(value = "http-connections-leak", produces = {"application/json"})
-    public ResponseEntity<Void> leakHttpConnections() throws Exception {
+    public ResponseEntity<Void> leakHttpConnections() {
         log.debug("HTTP Connections Leak");
         httpConnectionLeak.start();
         return new ResponseEntity<>(HttpStatus.OK);
@@ -199,7 +202,7 @@ public class BuggyAppController {
     @GetMapping(value = "slow-endpoint", produces = {"application/json"})
     public ResponseEntity<Void> slowEndPoint(@RequestParam Integer delayInSeconds) throws Exception {
         log.debug("HTTP Connections Leak");
-        Thread.sleep(delayInSeconds * 1000);
+        Thread.sleep(delayInSeconds * 1000L);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -207,20 +210,20 @@ public class BuggyAppController {
     public ResponseEntity<String> handleImageUpload(@RequestParam MultipartFile file) throws InterruptedException {
         // Process the uploaded image (save it, perform operations, etc.)
         // You can access the image data using file.getBytes()
-        Thread.sleep(3 * 1000);
+        Thread.sleep(3 * 1000L);
         // For simplicity, this example just returns a success message
         return ResponseEntity.ok("Image uploaded successfully!");
     }
 
     @GetMapping(value = "WebClient-nio-hugeupload-connections", produces = {"application/json"})
-    public ResponseEntity<Void> webClientHugeUploads(@RequestParam("image.url") String imageUrl, @RequestParam("rest.url") String restUrl, @RequestParam Integer numberOfCalls) throws Exception {
+    public ResponseEntity<Void> webClientHugeUploads(@RequestParam("image.url") String imageUrl, @RequestParam("rest.url") String restUrl, @RequestParam Integer numberOfCalls) {
         log.debug("HTTP Connections Leak");
         webClientService.loadWebClientCalls(numberOfCalls, restUrl, imageUrl);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "restClient-nio-hugeupload-connections", produces = {"application/json"})
-    public ResponseEntity<Void> restClientHugeUploads(@RequestParam("image.url") String imageUrl, @RequestParam("rest.url") String restUrl, @RequestParam Integer numberOfCalls) throws Exception {
+    public ResponseEntity<Void> restClientHugeUploads(@RequestParam("image.url") String imageUrl, @RequestParam("rest.url") String restUrl, @RequestParam Integer numberOfCalls) {
         log.debug("HTTP Connections Leak");
         restClientService.loadRestClientCallsWithThreads(numberOfCalls, restUrl, imageUrl);
         return new ResponseEntity<>(HttpStatus.OK);
