@@ -37,7 +37,6 @@ public class BookParser {
                     .build()
                     .parse(reader);
 
-            int id = 1;
             for (CSVRecord record : records) {
                 // book_id,isbn,authors,original_publication_year,original_title,language_code,image_url
 //                System.out.println(record.get(0)); // Access column by index
