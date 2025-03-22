@@ -42,7 +42,7 @@ public class MemoryLeakDemoService {
     }
 
     public void sortBigList() {
-        var list = generateOrgetBigList();
+        var list = generateOrGetBigList();
         var comp = new MyComp();
         log.info("Sorting big list");
         var started = Stopwatch.createStarted();
@@ -62,7 +62,7 @@ public class MemoryLeakDemoService {
     }
 
     @SneakyThrows
-    public List<String> generateOrgetBigList() {
+    private static List<String> generateOrGetBigList() {
         Path path = Paths.get("biglist.txt");
         if (Files.exists(path)) {
             return Files.readAllLines(path);
