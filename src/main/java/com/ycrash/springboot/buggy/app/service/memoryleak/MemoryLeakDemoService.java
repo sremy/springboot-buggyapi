@@ -50,7 +50,7 @@ public class MemoryLeakDemoService {
         log.info("Sorted big list in {}", started.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 
-    private static class MyComp implements Comparator<String> {
+    static class MyComp implements Comparator<String> {
 
         @Override
         public int compare(String a, String b) {
