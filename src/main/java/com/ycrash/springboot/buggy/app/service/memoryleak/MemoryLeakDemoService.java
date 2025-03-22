@@ -54,10 +54,31 @@ public class MemoryLeakDemoService {
 
         @Override
         public int compare(String a, String b) {
-            return Integer.compare(
-                    Integer.parseInt(a.substring(3)),
-                    Integer.parseInt(b.substring(3))
-            );
+            // Skip the "Day" prefix
+            int aStartIndex = 3;
+            int bStartIndex = 3;
+
+            // Get lengths of the numeric parts
+            int aLength = a.length() - aStartIndex;
+            int bLength = b.length() - bStartIndex;
+
+            // Different lengths - longer number is larger
+            if (aLength != bLength) {
+                return aLength - bLength;
+            }
+
+            // Same length - compare digit by digit
+            for (int i = 0; i < aLength; i++) {
+                char aDigit = a.charAt(aStartIndex + i);
+                char bDigit = b.charAt(bStartIndex + i);
+
+                if (aDigit != bDigit) {
+                    return aDigit - bDigit;
+                }
+            }
+
+            // Numbers are identical
+            return 0;
         }
     }
 
