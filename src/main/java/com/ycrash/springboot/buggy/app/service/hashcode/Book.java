@@ -1,5 +1,8 @@
 package com.ycrash.springboot.buggy.app.service.hashcode;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -14,6 +17,10 @@ public class Book {
     Integer publicationYear;
     Integer price;
     String imageUrl;
+
+    @Getter
+    @Setter
+    Ratings ratings;
 
     public Book(Integer id, String title, String isbn, String authors, String description, String languageCode, Integer publicationYear, Integer price, String imageUrl) {
         this.id = id;
@@ -37,7 +44,8 @@ public class Book {
 
     @Override
     public int hashCode() {
-        return id/10000;
+        return id;
+//        return id/10000;
     }
 
     @Override
@@ -52,6 +60,7 @@ public class Book {
                 .add("publicationYear=" + publicationYear)
                 .add("price=" + price)
                 .add("imageUrl='" + imageUrl + "'")
+                .add("ratings='" + (ratings == null ? "null" : ratings.getAverageRating() + " by " + ratings.getRatingsSize() + " readers'"))
                 .toString();
     }
 }

@@ -2,7 +2,8 @@ package com.ycrash.springboot.buggy.app.service.memoryleak;
 
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -18,9 +19,10 @@ import java.util.concurrent.TimeUnit;
  * @author Ram Lakshmanan
  */
 
-@Slf4j
 @Service
 public class MemoryLeakDemoService {
+
+    private static final Logger log = LoggerFactory.getLogger(MemoryLeakDemoService.class);
 
     static Object1 object1 = new Object1();
 
@@ -47,7 +49,7 @@ public class MemoryLeakDemoService {
         log.info("Sorting big list");
         var started = Stopwatch.createStarted();
         list.sort(comp);
-        log.info("Sorted big list in {}", started.stop().elapsed(TimeUnit.MILLISECONDS));
+        log.info("Sorted big list in {} ms", started.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 
     static class MyComp implements Comparator<String> {

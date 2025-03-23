@@ -1,19 +1,20 @@
 package com.ycrash.springboot.buggy.app.service.exception;
 
-import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 @Service
-@Log4j2
 public class BuggyService {
     record Item(int id, String name) {
     }
     Random random = new Random();
+
+    private static final Logger log = LoggerFactory.getLogger(BuggyService.class);
 
     public void run() {
         var list = getListOf1KInterger();
@@ -23,7 +24,7 @@ public class BuggyService {
                 return 100 / diff;
             });
         } catch (Exception e) {
-            log.error(e);
+            log.error("Exception during sort", e);
         }
     }
 

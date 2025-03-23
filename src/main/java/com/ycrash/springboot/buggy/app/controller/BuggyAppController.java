@@ -164,7 +164,7 @@ public class BuggyAppController {
     @GetMapping(value = "disk-space-fill", produces = {"application/json"})
     public ResponseEntity<String> diskSpaceFill(@RequestParam("drive.location") String driveLocation, @RequestParam("percentage.fill") Integer percentageFill) {
         log.debug("Disk Space Fill");
-        if (percentageFill <= 100) {
+        if (percentageFill <= 90) {
             diskSpaceService.fillDiskSpace(driveLocation, percentageFill);
             return new ResponseEntity<>("", HttpStatus.OK);
         } else {
@@ -253,20 +253,21 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "hashcode", produces = { "application/text" }, method = RequestMethod.GET)
+    @RequestMapping(value = "hashcode", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeHashCode() {
 		log.debug("HashCode demo");
 		String bookInsertion = hashCodeService.start();
 		return new ResponseEntity<>(bookInsertion, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "hashcode/search", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "hashcode/random", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeHashCodeSearch() {
 
 		long startTime = System.currentTimeMillis();
-		List<Book> bookList = hashCodeService.search();
+		Book book = hashCodeService.randomBook();
 		long durationMilliSec = System.currentTimeMillis() - startTime;
-		return new ResponseEntity<>(String.valueOf(durationMilliSec), HttpStatus.OK);
+        String response = book.toString() + "\n searched in " + durationMilliSec + "ms";
+        return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "concurrency", produces = { "text/plain" }, method = RequestMethod.GET)
