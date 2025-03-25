@@ -1,4 +1,4 @@
-package com.ycrash.springboot.buggy.app.service.memoryleak;
+package com.ycrash.springboot.buggy.app.service.sort;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,12 +7,12 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MemoryLeakDemoServiceTest {
-    private MemoryLeakDemoService.MyComp comparator;
+class SorterDemoServiceTest {
+    private SorterService.MyComp comparator;
 
     @BeforeEach
     void setUp() {
-        comparator = new MemoryLeakDemoService.MyComp();
+        comparator = new SorterService.MyComp();
     }
 
     @Test

@@ -18,6 +18,7 @@ import com.ycrash.springboot.buggy.app.service.network.NetworkLagService;
 import com.ycrash.springboot.buggy.app.service.oomcrash.OOMCrashService;
 import com.ycrash.springboot.buggy.app.service.oomcrash.OOMNoCrashService;
 import com.ycrash.springboot.buggy.app.service.resttemplate.RestTemplateService;
+import com.ycrash.springboot.buggy.app.service.sort.SorterService;
 import com.ycrash.springboot.buggy.app.service.stackoverflow.StackOverflowDemoService;
 import com.ycrash.springboot.buggy.app.service.threadleak.ThreadLeakDemoService;
 import com.ycrash.springboot.buggy.app.service.webclient.WebClientService;
@@ -84,6 +85,9 @@ public class BuggyAppController {
 
 	@Autowired
 	private ConcurrencyService concurrencyService;
+
+    @Autowired
+    private SorterService sorterService;
 
 
 	@Autowired
@@ -236,10 +240,10 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "memory-leak3", produces = {"application/json"})
-    public ResponseEntity<Void> invokeMemoryLeak3() {
-        log.debug("Memory leak 3 demo");
-        memoryLeakDemoService.sortBigList();
+    @GetMapping(value = "sort", produces = {"application/json"})
+    public ResponseEntity<Void> invokeSort() {
+        log.debug("Sorter demo");
+        sorterService.sortBigList();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
