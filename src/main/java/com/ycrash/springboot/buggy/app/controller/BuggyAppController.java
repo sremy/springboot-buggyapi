@@ -12,6 +12,7 @@ import com.ycrash.springboot.buggy.app.service.exception.BuggyService;
 import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.books.Book;
 import com.ycrash.springboot.buggy.app.service.httpconnectionleak.HttpConnectionLeak;
+import com.ycrash.springboot.buggy.app.service.memory.GCStruggleService;
 import com.ycrash.springboot.buggy.app.service.memoryleak.MemoryLeakDemoService;
 import com.ycrash.springboot.buggy.app.service.memoryleak.max.BigObject;
 import com.ycrash.springboot.buggy.app.service.metaspaceleak.MetaspaceLeakService;
@@ -92,6 +93,9 @@ public class BuggyAppController {
 
     @Autowired
     private FactorialService factorialService;
+
+    @Autowired
+    private GCStruggleService gcStruggleService;
 
 
 	@Autowired
@@ -248,6 +252,13 @@ public class BuggyAppController {
     public ResponseEntity<Void> invokeSort() {
         log.debug("Sorter demo");
         sorterService.sortBigList();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "gc-struggle", produces = {"application/json"})
+    public ResponseEntity<Void> invokeGCStruggle() {
+        log.debug("GC Struggle demo");
+        gcStruggleService.start();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
