@@ -28,7 +28,7 @@ public class ConcurrencyService {
         IntTask myTask3 = new MyTask(1, 2);
         IntTask myTask4 = new MyTask(20, 80);
         IntTask myTask5 = new MyTask(20, 80);
-        IntTask myTask6 = new MyTask(20, 80);
+        IntTask myTask6 = new MyTask(45, 45);
         ArrayList<IntTask> taksList = Lists.newArrayList(myTask1, myTask2, myTask3, myTask4, myTask5, myTask6);
 
         try {

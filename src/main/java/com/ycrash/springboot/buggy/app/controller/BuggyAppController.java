@@ -1,6 +1,7 @@
 package com.ycrash.springboot.buggy.app.controller;
 
 import com.ycrash.springboot.buggy.app.service.blockedapp.BlockedAppDemoService;
+import com.ycrash.springboot.buggy.app.service.compute.FactorialService;
 import com.ycrash.springboot.buggy.app.service.concurrency.ConcurrencyService;
 import com.ycrash.springboot.buggy.app.service.cpuspike.CPUSpikeDemoService;
 import com.ycrash.springboot.buggy.app.service.dbconnectionleak.DBConnectionLeakService;
@@ -88,6 +89,9 @@ public class BuggyAppController {
 
     @Autowired
     private SorterService sorterService;
+
+    @Autowired
+    private FactorialService factorialService;
 
 
 	@Autowired
@@ -284,6 +288,21 @@ public class BuggyAppController {
 				.collect(Collectors.joining("\n"));
 		return new ResponseEntity<>(stringResult, HttpStatus.OK);
 	}
+
+
+    @GetMapping("/factorial/recursive")
+    public ResponseEntity<Long> getFactorialRecursive(@RequestParam int n) {
+        long result = factorialService.computeFactorialRecursive(n);
+        log.info("FactorialRecursive({}) returns {}", n, result);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/factorial/iterative")
+    public ResponseEntity<Long> getFactorialIterative(@RequestParam int n) {
+        long result = factorialService.computeFactorialIterative(n);
+        log.info("FactorialIterative({}) returns {}", n, result);
+        return ResponseEntity.ok(result);
+    }
 
 
 }
