@@ -11,6 +11,7 @@ import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnection
 import com.ycrash.springboot.buggy.app.service.hashcode.Book;
 import com.ycrash.springboot.buggy.app.service.hashcode.HashCodeService;
 import com.ycrash.springboot.buggy.app.service.httpconnectionleak.HttpConnectionLeak;
+import com.ycrash.springboot.buggy.app.service.memory.GCStruggleService;
 import com.ycrash.springboot.buggy.app.service.memoryleak.MemoryLeakDemoService;
 import com.ycrash.springboot.buggy.app.service.memoryleak.max.BigObject;
 import com.ycrash.springboot.buggy.app.service.metaspaceleak.MetaspaceLeakService;
@@ -84,6 +85,9 @@ public class BuggyAppController {
 
 	@Autowired
 	private ConcurrencyService concurrencyService;
+
+    @Autowired
+    private GCStruggleService gcStruggleService;
 
 
 	@Autowired
@@ -240,6 +244,13 @@ public class BuggyAppController {
     public ResponseEntity<Void> invokeMemoryLeak3() {
         log.debug("Memory leak 3 demo");
         memoryLeakDemoService.sortBigList();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "gc-struggle", produces = {"application/json"})
+    public ResponseEntity<Void> invokeGCStruggle() {
+        log.debug("GC Struggle demo");
+        gcStruggleService.start();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
