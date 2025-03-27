@@ -1,8 +1,5 @@
 package com.ycrash.springboot.buggy.app.service.books;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -18,8 +15,7 @@ public class Book {
     Integer price;
     String imageUrl;
 
-    @Getter
-    @Setter
+
     Ratings ratings;
 
     public Book(Integer id, String title, String isbn, String authors, String description, String languageCode, Integer publicationYear, Integer price, String imageUrl) {
@@ -32,6 +28,14 @@ public class Book {
         this.publicationYear = publicationYear;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Ratings getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Ratings ratings) {
+        this.ratings = ratings;
     }
 
     @Override

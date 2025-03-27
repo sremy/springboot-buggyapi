@@ -1,8 +1,5 @@
 package com.ycrash.springboot.buggy.app.service.books;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
 
 
@@ -12,11 +9,17 @@ public class Ratings {
         this.ratings = ratings;
     }
 
-    @Getter @Setter
     List<Rating> ratings;
 
     float averageRating = -1;
 
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
 
     public synchronized float getAverageRating() {
         if (averageRating == -1 && ratings != null) {
