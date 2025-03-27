@@ -1,11 +1,11 @@
 package com.ycrash.springboot.buggy.app.service.sort;
 
 import com.google.common.base.Stopwatch;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,18 +40,22 @@ public class SorterService {
         }
     }
 
-    @SneakyThrows
+
     private static List<String> generateOrGetBigList() {
-        Path path = Paths.get("biglist.txt");
-        if (Files.exists(path)) {
-            return Files.readAllLines(path);
+        try {
+            Path path = Paths.get("biglist.txt");
+            if (Files.exists(path)) {
+                return Files.readAllLines(path);
+            }
+            var random = new Random();
+            var list = new ArrayList<String>();
+            for (int i = 0; i < 10_000_000; i++) {
+                list.add("Day" + random.nextInt(0, 100_000_000));
+            }
+            Files.write(path, list);
+            return list;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        var random = new Random();
-        var list = new ArrayList<String>();
-        for (int i = 0; i < 10_000_000; i++) {
-            list.add("Day" + random.nextInt(0, 100_000_000));
-        }
-        Files.write(path, list);
-        return list;
     }
 }
