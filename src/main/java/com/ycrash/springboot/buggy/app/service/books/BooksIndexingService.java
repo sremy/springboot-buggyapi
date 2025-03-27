@@ -1,4 +1,4 @@
-package com.ycrash.springboot.buggy.app.service.hashcode;
+package com.ycrash.springboot.buggy.app.service.books;
 
 import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class HashCodeService {
+public class BooksIndexingService {
 
-    private static final Logger log = LoggerFactory.getLogger(HashCodeService.class);
+    private static final Logger log = LoggerFactory.getLogger(BooksIndexingService.class);
 
     private final Map<BookKey, Book> catalog = new HashMap<>();
     private List<Book> books;

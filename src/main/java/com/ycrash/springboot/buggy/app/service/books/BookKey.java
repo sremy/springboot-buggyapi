@@ -1,4 +1,4 @@
-package com.ycrash.springboot.buggy.app.service.hashcode;
+package com.ycrash.springboot.buggy.app.service.books;
 
 import java.util.Objects;
 
@@ -17,8 +17,6 @@ public record BookKey(Integer id) {
 
     @Override
     public int hashCode() {
-            return id/10000;
-//             return Objects.hashCode(id);
-//        return id;
+            return id/6000;
     }
 }

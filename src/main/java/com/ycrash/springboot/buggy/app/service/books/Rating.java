@@ -1,4 +1,4 @@
-package com.ycrash.springboot.buggy.app.service.hashcode;
+package com.ycrash.springboot.buggy.app.service.books;
 
 public class Rating {
     private final int userId;

@@ -1,6 +1,7 @@
 package com.ycrash.springboot.buggy.app.controller;
 
 import com.ycrash.springboot.buggy.app.service.blockedapp.BlockedAppDemoService;
+import com.ycrash.springboot.buggy.app.service.books.BooksIndexingService;
 import com.ycrash.springboot.buggy.app.service.compute.FactorialService;
 import com.ycrash.springboot.buggy.app.service.concurrency.ConcurrencyService;
 import com.ycrash.springboot.buggy.app.service.cpuspike.CPUSpikeDemoService;
@@ -9,8 +10,7 @@ import com.ycrash.springboot.buggy.app.service.deadlock.DeadLockDemoService;
 import com.ycrash.springboot.buggy.app.service.diskspace.DiskSpaceService;
 import com.ycrash.springboot.buggy.app.service.exception.BuggyService;
 import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnectionLeakService;
-import com.ycrash.springboot.buggy.app.service.hashcode.Book;
-import com.ycrash.springboot.buggy.app.service.hashcode.HashCodeService;
+import com.ycrash.springboot.buggy.app.service.books.Book;
 import com.ycrash.springboot.buggy.app.service.httpconnectionleak.HttpConnectionLeak;
 import com.ycrash.springboot.buggy.app.service.memoryleak.MemoryLeakDemoService;
 import com.ycrash.springboot.buggy.app.service.memoryleak.max.BigObject;
@@ -82,7 +82,7 @@ public class BuggyAppController {
     private DiskSpaceService diskSpaceService;
 
     @Autowired
-	private HashCodeService hashCodeService;
+	private BooksIndexingService booksIndexingService;
 
 	@Autowired
 	private ConcurrencyService concurrencyService;
@@ -261,18 +261,18 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "hashcode", produces = { "text/plain" }, method = RequestMethod.GET)
+    @RequestMapping(value = "books", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeHashCode() {
-		log.debug("HashCode demo");
-		String bookInsertion = hashCodeService.start();
+		log.debug("Indexing demo");
+		String bookInsertion = booksIndexingService.start();
 		return new ResponseEntity<>(bookInsertion, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "hashcode/random", produces = { "text/plain" }, method = RequestMethod.GET)
+	@RequestMapping(value = "books/random", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeHashCodeSearch() {
 
 		long startTime = System.currentTimeMillis();
-		Book book = hashCodeService.randomBook();
+		Book book = booksIndexingService.randomBook();
 		long durationMilliSec = System.currentTimeMillis() - startTime;
         String response = book.toString() + "\n searched in " + durationMilliSec + "ms";
         return new ResponseEntity<>(response, HttpStatus.OK);
