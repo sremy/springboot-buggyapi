@@ -111,10 +111,17 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "cpu-spike", produces = {"application/json"})
+    @PostMapping(value = "cpu-spike", produces = {"application/json"})
     public ResponseEntity<Void> invokeSpikeCpu() {
         log.debug("Starting cpu spike demo");
         cpuSpikeDemoService.start();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "cpu-spike", produces = {"application/json"})
+    public ResponseEntity<Void> stopSpikeCpu() {
+        log.debug("Stop cpu spike");
+        cpuSpikeDemoService.stop();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
