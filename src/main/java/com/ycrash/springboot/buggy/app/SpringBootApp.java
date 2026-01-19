@@ -39,6 +39,7 @@ public class SpringBootApp implements CommandLineRunner {
 
     public static void main(String args[]) throws Exception {
         new SpringApplication(SpringBootApp.class).run(args);
+        System.out.println("--> http://localhost:8090/swagger-ui/index.html");
     }
 
     @Override
