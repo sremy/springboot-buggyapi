@@ -35,10 +35,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 		"com.ycrash.springboot.buggy.app.service.network"
 
 })
-public class SpringBootApp implements CommandLineRunner {
+public class SpringBootBuggyApp implements CommandLineRunner {
 
     public static void main(String args[]) throws Exception {
-        new SpringApplication(SpringBootApp.class).run(args);
+        new SpringApplication(SpringBootBuggyApp.class).run(args);
         System.out.println("--> http://localhost:8090/swagger-ui/index.html");
     }
 

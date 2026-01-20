@@ -26,7 +26,7 @@ Please navigate to the folder and execute the following commands in your termina
 
 
 ## Run the application
-1. Run the class `com.ycrash.springboot.buggy.app.SpringBootApp` or the jar: `java -jar  target/ycrash.springboot*.jar`
+1. Run the class `com.ycrash.springboot.buggy.app.SpringBootBuggyApp` or the jar: `java -jar  target/ycrash.springboot*.jar`
 2. Open the application in the browser http://{your-host}:8090/swagger-ui.html to invoke the java performance problems using UI
 or curl command example 
 curl http://{your-host:8090}/v1/invoke/
