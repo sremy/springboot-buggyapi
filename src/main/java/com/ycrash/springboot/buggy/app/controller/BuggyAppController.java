@@ -8,7 +8,7 @@ import com.ycrash.springboot.buggy.app.service.cpuspike.CPUSpikeDemoService;
 import com.ycrash.springboot.buggy.app.service.dbconnectionleak.DBConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.deadlock.DeadLockDemoService;
 import com.ycrash.springboot.buggy.app.service.diskspace.DiskSpaceService;
-import com.ycrash.springboot.buggy.app.service.exception.BuggyService;
+import com.ycrash.springboot.buggy.app.service.exception.CustomSortService;
 import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.books.Book;
 import com.ycrash.springboot.buggy.app.service.httpconnectionleak.HttpConnectionLeak;
@@ -20,7 +20,7 @@ import com.ycrash.springboot.buggy.app.service.network.NetworkLagService;
 import com.ycrash.springboot.buggy.app.service.oomcrash.OOMCrashService;
 import com.ycrash.springboot.buggy.app.service.oomcrash.OOMNoCrashService;
 import com.ycrash.springboot.buggy.app.service.resttemplate.RestTemplateService;
-import com.ycrash.springboot.buggy.app.service.sort.SorterService;
+import com.ycrash.springboot.buggy.app.service.sort.SubStringSorterService;
 import com.ycrash.springboot.buggy.app.service.stackoverflow.StackOverflowDemoService;
 import com.ycrash.springboot.buggy.app.service.threadleak.ThreadLeakDemoService;
 import com.ycrash.springboot.buggy.app.service.webclient.WebClientService;
@@ -89,7 +89,7 @@ public class BuggyAppController {
 	private ConcurrencyService concurrencyService;
 
     @Autowired
-    private SorterService sorterService;
+    private SubStringSorterService subStringSorterService;
 
     @Autowired
     private FactorialService factorialService;
@@ -111,6 +111,7 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Tag(name = "Formation")
     @PostMapping(value = "cpu-spike", produces = {"application/json"})
     public ResponseEntity<Void> invokeSpikeCpu() {
         log.debug("Starting cpu spike demo");
@@ -118,6 +119,7 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Tag(name = "Formation")
     @DeleteMapping(value = "cpu-spike", produces = {"application/json"})
     public ResponseEntity<Void> stopSpikeCpu() {
         log.debug("Stop cpu spike");
@@ -159,6 +161,7 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Tag(name = "Formation")
     @GetMapping(value = "meta-space-leak", produces = {"application/json"})
     public ResponseEntity<Void> invokeMetaSpaceLeak() throws Exception {
         log.debug("Metasspace Memory leak demo");
@@ -246,6 +249,7 @@ public class BuggyAppController {
 
     private List<BigObject.SmallObject> smallObjects = new ArrayList<>();
 
+    @Tag(name = "Formation")
     @GetMapping(value = "memory-leak2", produces = {"application/json"})
     public ResponseEntity<Void> invokeMemoryLeak2() {
         log.debug("Memory leak 2 demo");
@@ -255,10 +259,19 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Tag(name = "Formation")
+    @GetMapping(value = "gc-struggle", produces = {"application/json"})
+    public ResponseEntity<Void> invokeGCStruggle() {
+        log.debug("GC Struggle demo");
+        gcStruggleService.start();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Tag(name = "Formation")
     @GetMapping(value = "sort", produces = {"application/json"})
     public ResponseEntity<Void> invokeSort() {
-        log.debug("Sorter demo");
-        sorterService.sortBigList();
+        log.debug("SubStringSorter demo");
+        subStringSorterService.sortBigList();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -270,15 +283,17 @@ public class BuggyAppController {
     }
 
     @Autowired
-    BuggyService buggyService;
+    CustomSortService customSortService;
 
-    @GetMapping(value = "buggy-sort", produces = {"application/json"})
+    @Tag(name = "Formation")
+    @GetMapping(value = "custom-sort", produces = {"application/json"})
     public ResponseEntity<Void> buggySort() {
-        log.debug("buggySort demo");
-        buggyService.run();
+        log.debug("CustomSort demo");
+        customSortService.run();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Tag(name = "Formation")
     @RequestMapping(value = "books", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeHashCode() {
 		log.debug("Indexing demo");
@@ -286,6 +301,8 @@ public class BuggyAppController {
 		return new ResponseEntity<>(bookInsertion, HttpStatus.OK);
 	}
 
+    // Pick a book randomly, search its ratings
+    @Tag(name = "Formation")
 	@RequestMapping(value = "books/random", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeHashCodeSearch() {
 
@@ -296,6 +313,8 @@ public class BuggyAppController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+    @Tag(name = "Formation")
+    // Concurrency demo: launch 6 tasks concurrently with an executor service providing 5 threads
 	@RequestMapping(value = "concurrency", produces = { "text/plain" }, method = RequestMethod.GET)
 	public ResponseEntity<String> invokeConcurrent() {
 		log.debug("Concurrent demo");
@@ -307,7 +326,8 @@ public class BuggyAppController {
 		return new ResponseEntity<>(stringResult, HttpStatus.OK);
 	}
 
-
+    @Tag(name = "Formation")
+    // Can be useful to test Arthas features like watch, time-tunnel, monitor, etc
     @GetMapping("/factorial/recursive")
     public ResponseEntity<Long> getFactorialRecursive(@RequestParam int n) {
         long result = factorialService.computeFactorialRecursive(n);
@@ -315,6 +335,7 @@ public class BuggyAppController {
         return ResponseEntity.ok(result);
     }
 
+    @Tag(name = "Formation")
     @GetMapping("/factorial/iterative")
     public ResponseEntity<Long> getFactorialIterative(@RequestParam int n) {
         long result = factorialService.computeFactorialIterative(n);

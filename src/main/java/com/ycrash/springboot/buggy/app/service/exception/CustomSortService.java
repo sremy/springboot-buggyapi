@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class BuggyService {
+public class CustomSortService {
     record Item(int id, String name) {
     }
     Random random = new Random();
 
-    private static final Logger log = LoggerFactory.getLogger(BuggyService.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomSortService.class);
 
     public void run() {
         var list = getListOf1KInterger();

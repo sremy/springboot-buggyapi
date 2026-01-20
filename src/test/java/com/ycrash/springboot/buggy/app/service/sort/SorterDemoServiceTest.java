@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SorterDemoServiceTest {
-    private SorterService.MyComp comparator;
+    private SubStringSorterService.MyComp comparator;
 
     @BeforeEach
     void setUp() {
-        comparator = new SorterService.MyComp();
+        comparator = new SubStringSorterService.MyComp();
     }
 
     @Test

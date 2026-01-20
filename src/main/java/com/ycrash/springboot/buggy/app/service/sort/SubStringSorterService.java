@@ -15,10 +15,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Sort a list of strings based on the integer contained in a substring
+ * Day-NNN
+ */
 @Service
-public class SorterService {
+public class SubStringSorterService {
 
-    private static final Logger log = LoggerFactory.getLogger(SorterService.class);
+    private static final Logger log = LoggerFactory.getLogger(SubStringSorterService.class);
 
     public void sortBigList() {
         var list = generateOrGetBigList();
@@ -34,8 +38,8 @@ public class SorterService {
         @Override
         public int compare(String a, String b) {
             return Integer.compare(
-                    Integer.parseInt(a.substring(3)),
-                    Integer.parseInt(b.substring(3))
+                    Integer.parseInt(a.substring(4)),
+                    Integer.parseInt(b.substring(4))
             );
         }
     }
@@ -50,7 +54,7 @@ public class SorterService {
             var random = new Random();
             var list = new ArrayList<String>();
             for (int i = 0; i < 10_000_000; i++) {
-                list.add("Day" + random.nextInt(0, 100_000_000));
+                list.add("Day-" + random.nextInt(0, 100_000_000));
             }
             Files.write(path, list);
             return list;
