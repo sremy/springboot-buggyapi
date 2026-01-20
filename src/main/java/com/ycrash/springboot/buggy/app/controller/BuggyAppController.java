@@ -7,7 +7,6 @@ import com.ycrash.springboot.buggy.app.service.concurrency.ConcurrencyService;
 import com.ycrash.springboot.buggy.app.service.cpuspike.CPUSpikeDemoService;
 import com.ycrash.springboot.buggy.app.service.dbconnectionleak.DBConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.deadlock.DeadLockDemoService;
-import com.ycrash.springboot.buggy.app.service.diskspace.DiskSpaceService;
 import com.ycrash.springboot.buggy.app.service.exception.CustomSortService;
 import com.ycrash.springboot.buggy.app.service.fileconnectionleak.FileConnectionLeakService;
 import com.ycrash.springboot.buggy.app.service.books.Book;
@@ -79,8 +78,7 @@ public class BuggyAppController {
     private RestTemplateService restClientService;
     @Autowired
     private NetworkLagService networkLagService;
-    @Autowired
-    private DiskSpaceService diskSpaceService;
+
 
     @Autowired
 	private BooksIndexingService booksIndexingService;
@@ -183,17 +181,6 @@ public class BuggyAppController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "disk-space-fill", produces = {"application/json"})
-    public ResponseEntity<String> diskSpaceFill(@RequestParam("drive.location") String driveLocation, @RequestParam("percentage.fill") Integer percentageFill) {
-        log.debug("Disk Space Fill");
-        if (percentageFill <= 90) {
-            diskSpaceService.fillDiskSpace(driveLocation, percentageFill);
-            return new ResponseEntity<>("", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Fill percentage cannot be more than 90", HttpStatus.BAD_REQUEST);
-        }
-
-    }
 
     @GetMapping(value = "network-lag-proxy", produces = {"application/json"})
     public ResponseEntity<String> networkLag(@RequestParam Integer port, @RequestParam Integer delay) {
