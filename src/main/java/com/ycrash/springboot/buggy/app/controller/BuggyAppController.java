@@ -102,9 +102,9 @@ public class BuggyAppController {
 	}
 	
 
-    @GetMapping(value = "blocked-state", produces = {"application/json"})
-    public ResponseEntity<Void> invokeBlockedState() {
-        log.debug("Starting blocked app demo");
+    @GetMapping(value = "wait-state", produces = {"application/json"})
+    public ResponseEntity<Void> invokeSleepingState() {
+        log.debug("Starting sleeping threads");
         blockedAppDemoService.start();
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -259,13 +259,6 @@ public class BuggyAppController {
     public ResponseEntity<Void> invokeSort() {
         log.debug("SubStringSorter demo");
         subStringSorterService.sortBigList();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping(value = "gc-struggle", produces = {"application/json"})
-    public ResponseEntity<Void> invokeGCStruggle() {
-        log.debug("GC Struggle demo");
-        gcStruggleService.start();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
